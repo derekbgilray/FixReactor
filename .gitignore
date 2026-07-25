@@ -1,3 +1,12 @@
+# Build output
+target/
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.code-workspace
+
 # Compiled class file
 *.class
 
