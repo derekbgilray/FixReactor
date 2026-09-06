@@ -1,4 +1,4 @@
-package com.synfix.engine.support;
+package com.fixreactor.engine.support;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,9 +16,9 @@ import quickfix.SessionSettings;
  */
 public final class TestConfig {
 
-    public static final String SENDER_A = "SYNFIX_A";
+    public static final String SENDER_A = "FIXREACTOR_A";
     public static final String TARGET_A = "TESTCLIENT";
-    public static final String SENDER_B = "SYNFIX_B";
+    public static final String SENDER_B = "FIXREACTOR_B";
     public static final String TARGET_B = "COUNTERPARTY_B";
 
     private TestConfig() {
@@ -55,7 +55,7 @@ public final class TestConfig {
                 [DEFAULT]
                 FileStorePath=%s
                 UseDataDictionary=Y
-                DataDictionary=FIX44-synfix.xml
+                DataDictionary=FIX44-fixreactor.xml
                 StartTime=00:00:00
                 EndTime=00:00:00
                 HeartBtInt=30

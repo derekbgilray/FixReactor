@@ -1,4 +1,4 @@
-package com.synfix.engine;
+package com.fixreactor.engine;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,15 +24,15 @@ import quickfix.SocketInitiator;
  * be mixed in one settings file: each connector only claims the sessions whose
  * {@code ConnectionType} matches it. See docs/planning/architecture-decisions.md AD-4.
  */
-public class SynFixServer implements AutoCloseable {
+public class FixReactorServer implements AutoCloseable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SynFixServer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FixReactorServer.class);
 
     private final SocketAcceptor acceptor;
     private final Initiator initiator;
 
-    public SynFixServer(SessionSettings settings) throws ConfigError {
-        SynFixApplication application = new SynFixApplication();
+    public FixReactorServer(SessionSettings settings) throws ConfigError {
+        FixReactorApplication application = new FixReactorApplication();
         MessageStoreFactory storeFactory = new FileStoreFactory(settings);
         MessageFactory messageFactory = new DefaultMessageFactory();
         SLF4JLogFactory logFactory = new SLF4JLogFactory(settings);
@@ -44,7 +44,7 @@ public class SynFixServer implements AutoCloseable {
     public void start() throws ConfigError {
         acceptor.start();
         initiator.start();
-        LOG.info("SynFIX started: {} acceptor session(s), {} initiator session(s)",
+        LOG.info("FixReactor started: {} acceptor session(s), {} initiator session(s)",
                 acceptor.getSessions().size(), initiator.getSessions().size());
     }
 
@@ -67,7 +67,7 @@ public class SynFixServer implements AutoCloseable {
                 ? loadSettings(Path.of(args[0]))
                 : loadDefaultSettings();
 
-        SynFixServer server = new SynFixServer(settings);
+        FixReactorServer server = new FixReactorServer(settings);
         Runtime.getRuntime().addShutdownHook(new Thread(server::close));
         server.start();
         Thread.currentThread().join();
@@ -80,9 +80,9 @@ public class SynFixServer implements AutoCloseable {
     }
 
     private static SessionSettings loadDefaultSettings() throws ConfigError, IOException {
-        try (InputStream in = SynFixServer.class.getResourceAsStream("/synfix.cfg")) {
+        try (InputStream in = FixReactorServer.class.getResourceAsStream("/fixreactor.cfg")) {
             if (in == null) {
-                throw new ConfigError("synfix.cfg not found on the classpath");
+                throw new ConfigError("fixreactor.cfg not found on the classpath");
             }
             return new SessionSettings(in);
         }

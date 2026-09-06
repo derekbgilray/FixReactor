@@ -1,4 +1,4 @@
-package com.synfix.engine;
+package com.fixreactor.engine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ import quickfix.UnsupportedMessageType;
  * rather than held in fields, so one instance can back both sides of a crossing-sessions
  * deployment. See docs/planning/architecture-decisions.md AD-5.
  */
-public class SynFixApplication extends MessageCracker implements Application {
+public class FixReactorApplication extends MessageCracker implements Application {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SynFixApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FixReactorApplication.class);
 
     @Override
     public void onCreate(SessionID sessionId) {

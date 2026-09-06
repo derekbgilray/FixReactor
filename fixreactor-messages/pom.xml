@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.synfix</groupId>
-        <artifactId>synfix-parent</artifactId>
+        <groupId>com.fixreactor</groupId>
+        <artifactId>fixreactor-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>synfix-messages</artifactId>
-    <name>SynFIX Messages</name>
-    <description>FIX 4.4 message classes generated from the SynFIX custom dictionary</description>
+    <artifactId>fixreactor-messages</artifactId>
+    <name>FixReactor Messages</name>
+    <description>FIX 4.4 message classes generated from the FixReactor custom dictionary</description>
 
     <dependencies>
         <!-- Generated message classes extend quickfix.Message / quickfix.FieldMap, which live
@@ -45,7 +45,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <dictFile>${project.basedir}/src/main/resources/FIX44-synfix.xml</dictFile>
+                            <dictFile>${project.basedir}/src/main/resources/FIX44-fixreactor.xml</dictFile>
                             <packaging>quickfix.fix44</packaging>
                             <fieldPackage>quickfix.field</fieldPackage>
                         </configuration>

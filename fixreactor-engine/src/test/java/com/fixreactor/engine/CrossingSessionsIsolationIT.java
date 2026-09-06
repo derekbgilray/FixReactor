@@ -1,9 +1,9 @@
-package com.synfix.engine;
+package com.fixreactor.engine;
 
-import static com.synfix.engine.support.TestConfig.SENDER_A;
-import static com.synfix.engine.support.TestConfig.SENDER_B;
-import static com.synfix.engine.support.TestConfig.TARGET_A;
-import static com.synfix.engine.support.TestConfig.TARGET_B;
+import static com.fixreactor.engine.support.TestConfig.SENDER_A;
+import static com.fixreactor.engine.support.TestConfig.SENDER_B;
+import static com.fixreactor.engine.support.TestConfig.TARGET_A;
+import static com.fixreactor.engine.support.TestConfig.TARGET_B;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,8 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import com.synfix.engine.support.TestConfig;
-import com.synfix.engine.support.TestCounterparty;
+import com.fixreactor.engine.support.TestConfig;
+import com.fixreactor.engine.support.TestCounterparty;
 
 import quickfix.Session;
 import quickfix.SessionID;
@@ -53,7 +53,7 @@ class CrossingSessionsIsolationIT {
     Path tempDir;
 
     private Path engineStore;
-    private SynFixServer server;
+    private FixReactorServer server;
     private TestCounterparty counterparty;
 
     @BeforeEach
@@ -67,7 +67,7 @@ class CrossingSessionsIsolationIT {
                 TestConfig.testClient(tempDir.resolve("client"), portA, portB));
         counterparty.start();
 
-        server = new SynFixServer(TestConfig.engine(engineStore, portA, portB));
+        server = new FixReactorServer(TestConfig.engine(engineStore, portA, portB));
         server.start();
 
         awaitTrue(() -> Session.lookupSession(sessionA) != null
@@ -163,7 +163,7 @@ class CrossingSessionsIsolationIT {
     private NewOrderSingle newOrder(String clOrdId) {
         NewOrderSingle order = new NewOrderSingle(
                 new ClOrdID(clOrdId), new Side(Side.BUY), new TransactTime(), new OrdType(OrdType.MARKET));
-        order.set(new Symbol("SYNFIX"));
+        order.set(new Symbol("FIXREACTOR"));
         order.set(new HandlInst(HandlInst.AUTOMATED_EXECUTION_ORDER_PRIVATE));
         return order;
     }

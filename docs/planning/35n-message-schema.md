@@ -1,9 +1,9 @@
 # `35=n` ConfigRule Message Schema
 
-The authoritative field reference for SynFIX's in-band configuration message. This is the
+The authoritative field reference for FixReactor's in-band configuration message. This is the
 spec someone hand-building a `35=n` message reads.
 
-Defined in `synfix-messages/src/main/resources/FIX44-synfix.xml`, generated into
+Defined in `fixreactor-messages/src/main/resources/FIX44-fixreactor.xml`, generated into
 `quickfix.fix44.ConfigRule`.
 
 ## Design constraints
@@ -68,7 +68,7 @@ This bit the reference scenario immediately, and is worth knowing before writing
 
 ### The tag 66 case
 
-SynFIX's reference scenario matches `35=D` on `66=TEST`. Two facts discovered while
+FixReactor's reference scenario matches `35=D` on `66=TEST`. Two facts discovered while
 building the dictionary:
 
 1. Tag 66 is **not** unassigned — in stock FIX 4.4 it is `ListID` (STRING).
@@ -76,12 +76,12 @@ building the dictionary:
 
 So `66=TEST` on a `35=D` would fail dictionary validation out of the box.
 
-**Resolution:** `FIX44-synfix.xml` adds `<field name="ListID" required="N"/>` to
+**Resolution:** `FIX44-fixreactor.xml` adds `<field name="ListID" required="N"/>` to
 `NewOrderSingle`. This keeps the reference scenario as originally specified (match tag
 66, value `TEST`) and reuses a real standard FIX field rather than burning a custom tag
 on a test fixture. Semantically a list identifier on a single order is
 unusual, but the scenario is explicitly a test case, not a business flow.
 
-The alternative — allocating something like tag 5010 `SynFixTestTag` — was rejected
-because it would make the first end-to-end example depend on a SynFIX-proprietary tag,
+The alternative — allocating something like tag 5010 `FixReactorTestTag` — was rejected
+because it would make the first end-to-end example depend on a FixReactor-proprietary tag,
 which reads worse in documentation than a standard one.

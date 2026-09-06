@@ -1,4 +1,4 @@
-package com.synfix.engine.support;
+package com.fixreactor.engine.support;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

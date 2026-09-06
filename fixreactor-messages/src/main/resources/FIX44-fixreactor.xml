@@ -1115,7 +1115,7 @@
     <field name="ClOrdID" required="Y"/>
     <field name="SecondaryClOrdID" required="N"/>
     <field name="ClOrdLinkID" required="N"/>
-    <!-- SynFIX: not present on stock FIX 4.4 NewOrderSingle. Added so the reference
+    <!-- FixReactor: not present on stock FIX 4.4 NewOrderSingle. Added so the reference
          scenario can match on tag 66 without failing dictionary validation. -->
     <field name="ListID" required="N"/>
     <component name="Parties" required="N"/>
@@ -3658,7 +3658,7 @@
     <field name="EncodedTextLen" required="N"/>
     <field name="EncodedText" required="N"/>
   </message>
-  <!-- SynFIX extension: in-band response-rule configuration. See docs/planning/35n-message-schema.md -->
+  <!-- FixReactor extension: in-band response-rule configuration. See docs/planning/35n-message-schema.md -->
   <message name="ConfigRule" msgtype="n" msgcat="app">
     <field name="RuleID" required="N"/>
     <field name="MatchMsgType" required="Y"/>
@@ -6837,7 +6837,7 @@
     <field number="954" name="Nested3PartySubIDType" type="INT"/>
     <field number="955" name="LegContractSettlMonth" type="MONTHYEAR"/>
     <field number="956" name="LegInterestAccrualDate" type="LOCALMKTDATE"/>
-    <!-- SynFIX user-defined fields (5000-9999 range). See docs/planning/35n-message-schema.md -->
+    <!-- FixReactor user-defined fields (5000-9999 range). See docs/planning/35n-message-schema.md -->
     <field number="5000" name="RuleID" type="STRING"/>
     <field number="5001" name="MatchMsgType" type="STRING"/>
     <field number="5002" name="MatchTag" type="INT"/>

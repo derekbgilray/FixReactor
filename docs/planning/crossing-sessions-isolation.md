@@ -31,7 +31,7 @@ Points 1–3 are *source reading*. The test below is what turns them into eviden
 Go/no-go gate. Runs before any rules-engine code exists, so a failure here changes the
 architecture rather than invalidating work built on top of it.
 
-Setup: boot `SynFixServer` against a test-scoped config using a temporary
+Setup: boot `FixReactorServer` against a test-scoped config using a temporary
 `FileStorePath` and ephemeral ports (never the hardcoded 9880/9881 — CI port clashes).
 Session A is the engine's acceptor; a bare test `SocketInitiator` connects to it.
 Session B is the engine's initiator; a bare test `SocketAcceptor` receives its logon.
@@ -51,7 +51,7 @@ Assertions:
 ## Results
 
 Verified against **QuickFIX/J 3.0.1, Java 21 (Temurin), Maven 3.9.16**. All three
-assertions pass; no cross-contamination found. `SynFixServer` runs one `SocketAcceptor`
+assertions pass; no cross-contamination found. `FixReactorServer` runs one `SocketAcceptor`
 and one `SocketInitiator` over a single `SessionSettings`, and both connectors correctly
 claimed only their own session.
 

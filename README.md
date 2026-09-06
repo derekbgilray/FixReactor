@@ -1,11 +1,11 @@
-# SynFIX
+# FixReactor
 
-[![build](https://github.com/derekbgilray/SynFIX/actions/workflows/build.yml/badge.svg)](https://github.com/derekbgilray/SynFIX/actions/workflows/build.yml)
+[![build](https://github.com/derekbgilray/FixReactor/actions/workflows/build.yml/badge.svg)](https://github.com/derekbgilray/FixReactor/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **A self-hosted FIX counterparty you can program from inside the FIX session itself.**
 
-SynFIX stands up a real FIX session and plays the other side of it, so you can exercise a
+FixReactor stands up a real FIX session and plays the other side of it, so you can exercise a
 new workflow — message formats, session behaviour, business logic — before you spend
 money or calendar time on vendor certification or bilateral testing.
 
@@ -23,7 +23,7 @@ The existing simulators in this space (FIXSIM, Esprow, PhiFIX, EPAM's B2BITS cli
 simulator, Tradepoint, FixFlyer's CertiFlyer) are capable tools, but they broadly assume
 either a real counterparty relationship or a hosted, managed engagement.
 
-SynFIX assumes **zero counterparty**. One firm, testing its own systems, in its own
+FixReactor assumes **zero counterparty**. One firm, testing its own systems, in its own
 infrastructure, on its own schedule.
 
 ## What makes it different
@@ -60,7 +60,7 @@ that run actual FIX sessions over sockets.
 | Rules engine (match inbound → send templated response) | **Not yet implemented** |
 | `35=n` composer CLI | Planned |
 
-The rules engine is the next piece of work. Until it lands, SynFIX will hold a session
+The rules engine is the next piece of work. Until it lands, FixReactor will hold a session
 and log traffic, but will not auto-respond.
 
 ---
@@ -70,24 +70,24 @@ and log traffic, but will not auto-respond.
 Requires JDK 21. Maven is not needed — the wrapper handles it.
 
 ```bash
-git clone https://github.com/derekbgilray/SynFIX.git
-cd SynFIX
+git clone https://github.com/derekbgilray/FixReactor.git
+cd FixReactor
 ./mvnw clean verify
-java -jar synfix-engine/target/synfix.jar
+java -jar fixreactor-engine/target/fixreactor.jar
 ```
 
 That starts a FIX 4.4 acceptor on port 9880:
 
 ```
-INFO  event              FIX.4.4:SYNFIX_A->TESTCLIENT: Created session
-INFO  SynFixServer       SynFIX started: 1 acceptor session(s), 0 initiator session(s)
+INFO  event             FIX.4.4:FIXREACTOR_A->TESTCLIENT: Created session
+INFO  FixReactorServer  FixReactor started: 1 acceptor session(s), 0 initiator session(s)
 ```
 
 Point your system at `localhost:9880` with `SenderCompID=TESTCLIENT`,
-`TargetCompID=SYNFIX_A`, and log on.
+`TargetCompID=FIXREACTOR_A`, and log on.
 
-To use your own settings, pass a path: `java -jar synfix.jar /path/to/my.cfg`. The
-[default config](synfix-engine/src/main/resources/synfix.cfg) is commented and is the
+To use your own settings, pass a path: `java -jar fixreactor.jar /path/to/my.cfg`. The
+[default config](fixreactor-engine/src/main/resources/fixreactor.cfg) is commented and is the
 best starting point.
 
 ---
@@ -96,7 +96,7 @@ best starting point.
 
 ### Two sessions, one process
 
-SynFIX runs a `SocketAcceptor` and a `SocketInitiator` against a **single**
+FixReactor runs a `SocketAcceptor` and a `SocketInitiator` against a **single**
 `SessionSettings`. Each connector claims only the sessions whose `ConnectionType` matches
 it, so acceptor and initiator sessions can be mixed freely in one config file and shipped
 as one container.
@@ -141,8 +141,8 @@ Full spec: [35n-message-schema.md](docs/planning/35n-message-schema.md).
 ### Module layout
 
 ```
-synfix-messages   FIX 4.4 message classes generated from a custom dictionary
-synfix-engine     Session bootstrap, application callbacks, tests
+fixreactor-messages   FIX 4.4 message classes generated from a custom dictionary
+fixreactor-engine     Session bootstrap, application callbacks, tests
 ```
 
 They are split because generated code and hand-written code have different build

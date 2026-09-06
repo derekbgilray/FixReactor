@@ -1,6 +1,6 @@
 # Architecture Decisions
 
-Durable record of *why* SynFIX is built the way it is — the decisions that constrain
+Durable record of *why* FixReactor is built the way it is — the decisions that constrain
 implementation. When a decision here changes, change it here first.
 
 ## AD-1: QuickFIX/J 3.0.1, consumed from Maven Central
@@ -21,7 +21,7 @@ The codegenerator plugin is pinned separately, to **3.0.2**, via its own
 `quickfixj-codegenerator.version` property.
 
 **It also needs an explicit `plexus-utils` plugin dependency** (declared in
-`synfix-messages/pom.xml`). Both 3.0.1 and 3.0.2 of the plugin expect
+`fixreactor-messages/pom.xml`). Both 3.0.1 and 3.0.2 of the plugin expect
 `org.codehaus.plexus.util.FileUtils` to arrive transitively through a provided-scope
 `maven-project:2.2.1`. Maven 3.9 no longer exports that to the plugin realm, so the
 `generate` goal dies with `NoClassDefFoundError` without the explicit dependency. This is
@@ -30,23 +30,23 @@ release fixes it.
 
 There is a QuickFIX/J source checkout at `c:\build\quickfixj` (a 3.0.2-SNAPSHOT dev
 build). It is a **read-only API reference only** — never a dependency, never a source of
-copied build config. SynFIX resolves QuickFIX/J from Maven Central.
+copied build config. FixReactor resolves QuickFIX/J from Maven Central.
 
 ## AD-2: Multi-module reactor
 
-- `synfix-messages` — generated FIX 4.4 message classes. Different build mechanics
+- `fixreactor-messages` — generated FIX 4.4 message classes. Different build mechanics
   (codegen plugin, no hand-written code, changes rarely).
-- `synfix-engine` — hand-written engine and tests. Iterates constantly.
+- `fixreactor-engine` — hand-written engine and tests. Iterates constantly.
 
 Splitting them means engine test runs don't re-trigger codegen unless the dictionary
-actually changed, and it leaves a clean seam for the future `synfix-cli` module (which
-would depend on `synfix-messages` only — it needs to *compose* `35=n` messages, not run
+actually changed, and it leaves a clean seam for the future `fixreactor-cli` module (which
+would depend on `fixreactor-messages` only — it needs to *compose* `35=n` messages, not run
 an engine).
 
 ## AD-3: Generate into `quickfix.fix44` / `quickfix.field` — and never depend on the stock messages
 
 The codegenerator regenerates the **entire** FIX 4.4 message set from
-`FIX44-synfix.xml` (all stock messages plus our `ConfigRule` addition) into the same
+`FIX44-fixreactor.xml` (all stock messages plus our `ConfigRule` addition) into the same
 package names the stock artifact uses.
 
 This is the pattern QuickFIX/J's own `customising-quickfixj.md` documents, and it means:
@@ -66,7 +66,7 @@ is nothing to `<exclude>`; there is only this rule to not violate. Consider a
 
 ## AD-7: The dictionary is based on `FIX44.modified.xml`, not `FIX44.xml`
 
-`FIX44-synfix.xml` is derived from QuickFIX/J's **`FIX44.modified.xml`**, not the
+`FIX44-fixreactor.xml` is derived from QuickFIX/J's **`FIX44.modified.xml`**, not the
 plain `FIX44.xml` sitting next to it.
 
 The stock `FIX44.xml` cannot be code-generated as-is. Two of its `CHAR`-typed fields
@@ -77,19 +77,19 @@ unclosed character literal. QuickFIX/J's own build hits this too and works aroun
 module explicitly excludes `FIX44.xml` from generation for this reason.
 
 If the dictionary is ever re-based against a newer QuickFIX/J, take the `.modified`
-variant again and re-apply the SynFIX additions on top (the `ConfigRule` message, the
+variant again and re-apply the FixReactor additions on top (the `ConfigRule` message, the
 5000-block fields, and `ListID` on `NewOrderSingle`).
 
 ## AD-4: Crossing sessions on one engine process
 
 Two FIX sessions run in a single JVM against a single `SessionSettings` instance:
-`SYNFIX_A` (acceptor, faces the system under test) and `SYNFIX_B` (initiator).
+`FIXREACTOR_A` (acceptor, faces the system under test) and `FIXREACTOR_B` (initiator).
 
 Verified against QuickFIX/J 3.0.x source:
 
 - `AbstractSocketAcceptor` and `AbstractSocketInitiator` each **self-filter** by
   `ConnectionType` when iterating settings sections. One settings object can therefore
-  mix acceptor and initiator `[SESSION]` blocks, and `SynFixServer` constructs both
+  mix acceptor and initiator `[SESSION]` blocks, and `FixReactorServer` constructs both
   connectors against it.
 - A shared `FileStorePath`/`FileLogPath` in `[DEFAULT]` is safe: `FileStore` namespaces
   its files per-`SessionID` via `FileUtil.sessionIdFileName`. The only collision risk is
@@ -114,7 +114,7 @@ This is verified empirically by `CrossingSessionsIsolationIT`, not taken on trus
 
 ## AD-5: One `Application` instance, session-scoped state
 
-A single `SynFixApplication` serves both sessions, branching on the `SessionID` that
+A single `FixReactorApplication` serves both sessions, branching on the `SessionID` that
 every `quickfix.Application` callback receives. Isolation comes from state being keyed by
 `SessionID` (`RuleStore`), not from having separate Java objects per session — so a
 second `Application` instance would be duplication for no isolation benefit.
@@ -128,5 +128,5 @@ Two invariants for engine code:
 
 ## AD-6: Java 21
 
-SynFIX targets Java 21 (LTS), built with Eclipse Temurin 21. QuickFIX/J's own jars are
+FixReactor targets Java 21 (LTS), built with Eclipse Temurin 21. QuickFIX/J's own jars are
 built for Java 8, but that constrains only their bytecode, not consumers.

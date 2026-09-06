@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.synfix</groupId>
-    <artifactId>synfix-parent</artifactId>
+    <groupId>com.fixreactor</groupId>
+    <artifactId>fixreactor-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>SynFIX</name>
+    <name>FixReactor</name>
     <description>Self-hosted FIX counterparty simulator built on QuickFIX/J</description>
 
     <licenses>
@@ -20,8 +20,8 @@
     </licenses>
 
     <modules>
-        <module>synfix-messages</module>
-        <module>synfix-engine</module>
+        <module>fixreactor-messages</module>
+        <module>fixreactor-engine</module>
     </modules>
 
     <properties>
@@ -48,7 +48,7 @@
         <dependencies>
             <!--
               Deliberately NOT declaring quickfixj-all or quickfixj-messages-fix44 anywhere.
-              See docs/planning/architecture-decisions.md - SynFIX generates its own FIX 4.4
+              See docs/planning/architecture-decisions.md - FixReactor generates its own FIX 4.4
               message classes into quickfix.fix44, so the stock ones must never be on the
               classpath alongside them.
             -->
