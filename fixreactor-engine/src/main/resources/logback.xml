@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %-28logger{0} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- QuickFIX/J logs every inbound and outbound message at INFO through these two
+         loggers. Useful when debugging a session, very noisy otherwise. -->
+    <logger name="quickfixj.msg.incoming" level="WARN"/>
+    <logger name="quickfixj.msg.outgoing" level="WARN"/>
+    <logger name="quickfixj.event" level="INFO"/>
+
+    <logger name="com.fixreactor" level="INFO"/>
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
